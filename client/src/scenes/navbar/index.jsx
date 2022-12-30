@@ -56,7 +56,7 @@ const Navbar = () => {
             },
           }}
         >
-          Sociopedia
+          Eggos
         </Typography>
         {isNonMobileScreens && (
           <FlexBetween

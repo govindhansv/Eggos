@@ -43,6 +43,19 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+// Cyclic MERN stack Hosting Setup 
+
+app.use(express.static(path.join(__dirname, "./client/build")));
+
+app.get("*", function (_, res) {
+  res.sendFile(
+    path.join(__dirname, "./client/build/index.html"),
+    function (err) {
+      res.status(500).send(err);
+    }
+  );
+});
+
 /* ROUTES WITH FILES */
 app.post("/auth/register", upload.single("picture"), register);
 app.post("/posts", verifyToken, upload.single("picture"), createPost);
