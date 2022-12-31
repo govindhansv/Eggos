@@ -44,7 +44,22 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Cyclic MERN stack Hosting Setup 
+app.use(express.static(path.join(__dirname, "./client/build")));
 
+app.get("*", function (_, res) {
+  try{
+      res.sendFile(
+    path.join(__dirname, "./client/build/index.html"),
+    function (err) {
+      res.status(500).send(err);
+    }
+  );
+  }catch(err){
+    console.log('err occured');
+    console.log(err);
+  }
+
+});
 
 
 /* ROUTES WITH FILES */
@@ -55,6 +70,7 @@ app.post("/posts", verifyToken, upload.single("picture"), createPost);
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/posts", postRoutes);
+
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
@@ -72,13 +88,3 @@ mongoose
   })
   .catch((error) => console.log(`${error} did not connect`));
 
-app.use(express.static(path.join(__dirname, "./client/build")));
-
-app.get("*", function (_, res) {
-  res.sendFile(
-    path.join(__dirname, "./client/build/index.html"),
-    function (err) {
-      res.status(500).send(err);
-    }
-  );
-});
